@@ -6,16 +6,20 @@
   "scripts": {
     "test": "vitest",
     "build": "tsc",
-    "test:run": "vitest --run"
+    "test:run": "vitest --run",
+    "day01": "tsx src/day01/index.ts"
   },
   "keywords": [],
   "author": "John Bolton <jambolo@users.noreply.github.com> (https://jambolo.github.io)",
   "license": "MIT",
-  "packageManager": "pnpm@10.26.2",
+  "packageManager": "pnpm@10.29.3",
   "devDependencies": {
     "@types/node": "^25.2.3",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
+  },
+  "dependencies": {
+    "commander": "^14.0.3"
   }
 }
