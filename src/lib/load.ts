@@ -4,3 +4,8 @@ import fs from 'fs';
 export function commaSeparatedValues(path: string): string[] {
   return fs.readFileSync(path, 'utf-8').trim().split(',').map(value => value.trim());
 }
+
+// Reads a file and returns lines as an array.
+export function lines(path: string): string[] {
+  return fs.readFileSync(path, 'utf-8').trim().split('\n');
+}
