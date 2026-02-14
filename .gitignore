@@ -143,3 +143,9 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
 dist/
+
+# VS Code settings
+.vscode/
+
+# Claude AI files
+.claude/
