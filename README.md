@@ -35,3 +35,10 @@ For this year, I'm not going to write "Trivial" for every day. If you don't see 
 |------|--------|
 |    1 | 173787 |
 |    2 |    548 |
+
+## Day 5
+
+| Part |  Answer  |
+|------|----------|
+|    1 | d4cd2ee1 |
+|    2 | f2c730e5 |

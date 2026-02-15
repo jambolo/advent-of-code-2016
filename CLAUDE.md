@@ -87,10 +87,9 @@ export function solvePart2(input: string[]): Result | null {
 ### 4. Create `src/dayXX/index.ts`
 
 ```typescript
-import commander from 'commander';
-
 import { solvePart1, solvePart2 } from './dayXX-solver';
 import * as load from '../lib/load';
+import * as setup from '../lib/setup';
 
 const day = N;
 const { part, path } = setup.args(day);
