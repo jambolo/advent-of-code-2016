@@ -28,3 +28,10 @@ For this year, I'm not going to write "Trivial" for every day. If you don't see 
 |------|--------|
 |    1 |   1032 |
 |    2 |   1838 |
+
+## Day 4
+
+| Part | Answer |
+|------|--------|
+|    1 | 173787 |
+|    2 |    548 |

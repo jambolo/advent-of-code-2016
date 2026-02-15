@@ -93,15 +93,8 @@ import { solvePart1, solvePart2 } from './dayXX-solver';
 import * as load from '../lib/load';
 
 const day = N;
-const program = new commander.Command();
-program
-  .option('-p, --part <number>', 'part to solve', '1')
-  .option('-i, --path <path>', 'input file path', './src/dayXX/dayXX-input.txt')
-  .parse();
-
-const { part, path } = program.opts();
-
-console.log(`== Day ${day}, Part ${part} ==`);
+const { part, path } = setup.args(day);
+setup.banner(day, part);
 
 const input = load.lines(path);
 

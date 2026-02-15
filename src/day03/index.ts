@@ -1,18 +1,10 @@
-import commander from 'commander';
-
 import { solvePart1, solvePart2 } from './day03-solver';
 import * as load from '../lib/load';
+import * as setup from '../lib/setup';
 
 const day = 3;
-const program = new commander.Command();
-program
-  .option('-p, --part <number>', 'part to solve', '1')
-  .option('-i, --path <path>', 'input file path', './src/day03/day03-input.txt')
-  .parse();
-
-const { part, path } = program.opts();
-
-console.log(`== Day ${day}, Part ${part} ==`);
+const { part, path } = setup.args(day);
+setup.banner(day, part);
 
 const input = load.lines(path);
 

@@ -1,8 +1,8 @@
-import { solvePart1, solvePart2 } from './day02-solver';
+import { solvePart1, solvePart2 } from './day04-solver';
 import * as load from '../lib/load';
 import * as setup from '../lib/setup';
 
-const day = 2;
+const day = 4;
 const { part, path } = setup.args(day);
 setup.banner(day, part);
 
@@ -14,6 +14,7 @@ if (part === '2') {
 } else {
   result = solvePart1(input);
 }
+
 if (result === null) {
   console.log("No solution found.");
 } else {
