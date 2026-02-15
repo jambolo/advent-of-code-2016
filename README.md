@@ -1,3 +1,5 @@
+[![CI](https://github.com/jambolo/advent-of-code-2016/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/jambolo/advent-of-code-2016/actions/workflows/ci.yml)
+
 # advent-of-code-2016
 
 My solutions to Advent of Code 2016 written in Typescript. The development environment is VS Code and WSL Ubuntu.
