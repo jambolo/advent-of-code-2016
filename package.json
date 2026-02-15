@@ -8,7 +8,8 @@
     "build": "tsc",
     "test:run": "vitest --run",
     "day01": "tsx src/day01/index.ts",
-    "day02": "tsx src/day02/index.ts"
+    "day02": "tsx src/day02/index.ts",
+    "day03": "tsx src/day03/index.ts"
   },
   "keywords": [],
   "author": "John Bolton <jambolo@users.noreply.github.com> (https://jambolo.github.io)",

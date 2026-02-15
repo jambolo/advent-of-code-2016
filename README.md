@@ -21,3 +21,10 @@ For this year, I'm not going to write "Trivial" for every day. If you don't see 
 |------|--------|
 |    1 |  69642 |
 |    2 |  8CB23 |
+
+## Day 3
+
+| Part | Answer |
+|------|--------|
+|    1 |   1032 |
+|    2 |   1838 |
