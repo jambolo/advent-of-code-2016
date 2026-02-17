@@ -31,6 +31,8 @@ For this year, I'm not going to write "Trivial" for every day. If you don't see 
 
 ## Day 4
 
+Gotta love method chaining for processing arrays.
+
 | Part | Answer |
 |------|--------|
 |    1 | 173787 |

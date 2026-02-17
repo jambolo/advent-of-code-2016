@@ -3,8 +3,8 @@ export interface Result {
   answer: number | string;
 }
 
-function minEntryByValue(counts: [string, number][]): [string, number] {return counts.reduce((a, b) => a[1] < b[1] ? a : b); }
-function maxEntryByValue(counts: [string, number][]): [string, number] {return counts.reduce((a, b) => a[1] > b[1] ? a : b); }
+function minEntryByValue(counts: [string, number][]): [string, number] { return counts.reduce((a, b) => a[1] < b[1] ? a : b); }
+function maxEntryByValue(counts: [string, number][]): [string, number] { return counts.reduce((a, b) => a[1] > b[1] ? a : b); }
 
 function decode(messages: string[], pick: (entries: [string, number][]) => [string, number]): string {
   const picked = Array.from({ length: messages[0].length }, (_, i) => {
