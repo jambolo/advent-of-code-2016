@@ -60,3 +60,12 @@ Apparently, Typescript fully allocates and populates an array for each step in t
 |------|--------|
 |    1 |    110 |
 |    2 |    242 |
+
+## Day 8
+
+| Part |   Answer   |
+|------|------------|
+|    1 |        115 |
+|    2 | EFEYKFRFIJ |
+
+*The answer to part 2 was found by inspection.*
