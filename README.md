@@ -51,3 +51,12 @@ Gotta love method chaining for processing arrays.
 |------|----------|
 |    1 | kqsdmzft |
 |    2 | tpooccyo |
+
+## Day 7
+
+Apparently, Typescript fully allocates and populates an array for each step in the code `count = x.map(...).filter(...).length;` even though only the length is used in the end. Rust does not.
+
+| Part | Answer |
+|------|--------|
+|    1 |    110 |
+|    2 |    242 |
