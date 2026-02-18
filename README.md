@@ -78,3 +78,10 @@ I find recursion to be elegant, but otherwise annoying. Don't you?
 |------|-------------|
 |    1 |      150914 |
 |    2 | 11052855125 |
+
+## Day 10
+
+| Part | Answer |
+|------|--------|
+|    1 |    147 |
+|    2 |  55637 |
