@@ -69,3 +69,12 @@ Apparently, Typescript fully allocates and populates an array for each step in t
 |    2 | EFEYKFRFIJ |
 
 *The answer to part 2 was found by inspection.*
+
+## Day 9
+
+I find recursion to be elegant, but otherwise annoying. Don't you?
+
+| Part |   Answer    |
+|------|-------------|
+|    1 |      150914 |
+|    2 | 11052855125 |
