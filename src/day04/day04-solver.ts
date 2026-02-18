@@ -1,3 +1,4 @@
+import * as utils from '../lib/utils';
 export interface Result {
   answer: number | string;
 }
@@ -17,8 +18,7 @@ function parseRoom(line: string): { name: string; sectorId: number; checksum: st
 function roomIsValid(name: string, checksum: string): boolean {
 
   // Count the occurrences of each letter in the name
-  const counts = new Map<string, number>();
-  for (const char of name) if (char !== '-') counts.set(char, (counts.get(char) ?? 0) + 1);
+  const counts = utils.mapCounts([...name].filter(c => c !== '-'));
 
   // Compute the checksum
   const computed_checksum = [...counts]

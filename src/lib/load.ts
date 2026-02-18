@@ -1,3 +1,5 @@
+// Functions for loading input data from files.
+
 import fs from 'fs';
 
 // Reads a file containing comma-separated numbers and returns them as an array.

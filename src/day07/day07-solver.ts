@@ -1,10 +1,7 @@
+import * as utils from '../lib/utils';
+
 export interface Result {
   answer: number | string;
-}
-
-function splitAt(str: string, delim: string): [string, string] {
-  const i = str.indexOf(delim);
-  return i === -1 ? [str, ""] : [str.slice(0, i), str.slice(i)];
 }
 
 function containsABBA(s: string): boolean {
@@ -23,12 +20,12 @@ function separated(ip: string): [string[], string[]] {
   while (remainder.length > 0) {
     if (remainder[0] === "[") {
       var hypernet: string;
-      [hypernet, remainder] = splitAt(remainder.slice(1), "]"); // skip the '['
+      [hypernet, remainder] = utils.splitAt(remainder.slice(1), "]"); // skip the '['
       hypernets.push(hypernet);
       remainder = remainder.slice(1); // skip the "]"
     } else {
       var supernet: string;
-      [supernet, remainder] = splitAt(remainder, "[");
+      [supernet, remainder] = utils.splitAt(remainder, "[");
       supernets.push(supernet);
     }
   }

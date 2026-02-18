@@ -1,3 +1,5 @@
+// Common setup code for all days, including command-line argument parsing and banner printing.
+
 import commander from 'commander';
 
 export function args(day: number): { part: string; path: string } {

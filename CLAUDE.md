@@ -128,6 +128,12 @@ Add to `README.md`:
 
 ```
 ## Day N
+
+| Part | Answer |
+|------|--------|
+|    1 |      ? |
+|    2 |      ? |
+
 ```
 
 ## Shared Utilities (`src/lib/`)
