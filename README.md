@@ -123,3 +123,12 @@ Very straightforward. Caching is the key.
 |------|--------|
 |    1 |  35186 |
 |    2 |  22429 |
+
+## Day 15
+
+Classic Chinese Remainder Theorem. The numbers are small, so I solved it with a sieve. I didn't want to spend time trying to understand how to implement the more efficient method.
+
+| Part |  Answer |
+|------|---------|
+|    1 |  122318 |
+|    2 | 3208583 |

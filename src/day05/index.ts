@@ -7,6 +7,7 @@ const day = 5;
 const { part, path } = setup.args(day);
 setup.banner(day, part);
 
+// Hard-coded input
 const doorId = 'ugkcyxxp';
 
 let result;
