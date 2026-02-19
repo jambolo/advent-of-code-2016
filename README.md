@@ -105,3 +105,12 @@ Lots of messy code.
 |------|---------|
 |    1 |  318020 |
 |    2 | 9227674 |
+
+## Day 13
+
+Part 1 was trivial because I already had A* from Day 11. The only tricky part was avoiding hard-coding the input. Part 2 took a little thought because it is completely different from Part 1, but it turned out to be pretty easy, too.
+
+| Part | Answer |
+|------|--------|
+|    1 |     96 |
+|    2 |    141 |

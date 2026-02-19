@@ -1,7 +1,7 @@
 import { Heap } from './utils';
 
 // Finds the shortest path from start to goal using A*.
-// Returns the path and total cost, or null if no path exists.
+// Returns the total cost and path, or null if no path exists.
 // neighbors(node) should return an array of [neighbor, edgeCost] pairs.
 // h(node) should return a heuristic estimate of the cost from node to goal.
 // key(node) should return a unique string key for the node (used for caching).
