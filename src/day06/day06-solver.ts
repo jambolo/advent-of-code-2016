@@ -4,10 +4,10 @@ export interface Result {
   answer: number | string;
 }
 
-function decode(messages: string[], pick: (entries: [string, number][]) => [string, number]): string {
+function decode(messages: string[], pick: (entries: [string, number][]) => [string, number] | undefined): string {
   const picked = Array.from({ length: messages[0].length }, (_, i) => {
     const counts = utils.mapCounts(messages.map(m => m[i]));
-    return pick([...counts])[0];
+    return pick([...counts])![0];
   });
   return picked.join('');
 }

@@ -111,9 +111,6 @@ if (result === null) {
 }
 ```
 
-- Update the `import` and default `--path` to use the actual day number.
-- Change `load.lines(path)` if the solver expects a different input format.
-
 ### 5. Add script to `package.json`
 
 Add to `"scripts"`:
@@ -138,4 +135,17 @@ Add to `README.md`:
 
 ## Shared Utilities (`src/lib/`)
 
-- `load.ts`: File loading helpers (e.g., `commaSeparatedValues(path)` returns trimmed `string[]`)
+- `load.ts`: File loading helpers
+  - `lines(path)` — reads file, returns `string[]` split by newline
+  - `commaSeparatedValues(path)` — reads file, returns trimmed `string[]` split by comma
+- `setup.ts`: CLI setup
+  - `args(day)` — parses `-p` (part) and `-i` (input path) options, returns `{ part, path }`
+  - `banner(day, part)` — prints day/part header
+- `utils.ts`: General-purpose helpers
+  - `Heap<T>` — binary heap with user-supplied `compare(a, b) => boolean`. Methods: `push`, `pop`, `peek`, `clear`, `drain`. Properties: `size`, `isEmpty`
+  - `splitAt(str, delim)` — splits string at first occurrence of delimiter, returns `[before, after]`
+  - `minEntryByValue(entries)` — returns `[K, V]` pair with smallest value
+  - `maxEntryByValue(entries)` — returns `[K, V]` pair with largest value
+  - `mapCounts(arr)` — returns `Map<T, number>` of element frequencies
+- `astar.ts`: Pathfinding
+  - `shortestPath(start, goal, neighbors, h, key)` — A* search, returns `[cost, path]` or `null`

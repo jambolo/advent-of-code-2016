@@ -85,3 +85,14 @@ I find recursion to be elegant, but otherwise annoying. Don't you?
 |------|--------|
 |    1 |    147 |
 |    2 |  55637 |
+
+## Day 11
+
+What is AoC without puzzle that requires A*? In this A* puzzle, I couldn't think of an efficient heuristic, so I went with something basic, ensuring that it is admissible, and prayed that it would be sufficient.
+
+I got bored reimplementing A* in yet another language, so I cheated and let Claude implement it for me.
+
+| Part | Answer |
+|------|--------|
+|    1 |     33 |
+|    2 |     57 |
