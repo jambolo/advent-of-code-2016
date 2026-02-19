@@ -74,7 +74,7 @@ Apparently, Typescript fully allocates and populates an array for each step in t
 
 I find recursion to be elegant, but otherwise annoying. Don't you?
 
-| Part |   Answer    |
+| Part |    Answer   |
 |------|-------------|
 |    1 |      150914 |
 |    2 | 11052855125 |
@@ -96,3 +96,12 @@ I got bored reimplementing A* in yet another language, so I cheated and let Clau
 |------|--------|
 |    1 |     33 |
 |    2 |     57 |
+
+## Day 12
+
+Lots of messy code.
+
+| Part |  Answer |
+|------|---------|
+|    1 |  318020 |
+|    2 | 9227674 |
