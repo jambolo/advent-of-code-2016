@@ -114,3 +114,12 @@ Part 1 was trivial because I already had A* from Day 11. The only tricky part wa
 |------|--------|
 |    1 |     96 |
 |    2 |    141 |
+
+## Day 14
+
+Very straightforward. Caching is the key.
+
+| Part | Answer |
+|------|--------|
+|    1 |  35186 |
+|    2 |  22429 |
