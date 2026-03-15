@@ -99,7 +99,7 @@ function searchRecursive(node: Node, goal: {x: number, y: number}, prefix: strin
   }
 
   let neighbors: [Node, number][] = accessibleNodesOf(node, goal, prefix);
-  var maxCost = 0;
+  let maxCost = 0;
   for (let [n, _] of neighbors) {
     let cost = searchRecursive(n, goal, prefix);
     if (cost !== null) {

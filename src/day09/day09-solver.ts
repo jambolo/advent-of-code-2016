@@ -12,7 +12,7 @@ function decompressedLength(input: string, f: (input: string) => number): number
   let count = 0;
   while (remainder.length > 0) {
     if (remainder[0] === "(") {
-      var marker: string;
+      let marker: string;
       [marker, remainder] = utils.splitAt(remainder.slice(1), ")"); // skip the '('
       const match = markerRegex.exec(marker); // add the parentheses back for the regex
       if (match) {

@@ -19,12 +19,12 @@ function separated(ip: string): [string[], string[]] {
   let remainder = ip;
   while (remainder.length > 0) {
     if (remainder[0] === "[") {
-      var hypernet: string;
+      let hypernet: string;
       [hypernet, remainder] = utils.splitAt(remainder.slice(1), "]"); // skip the '['
       hypernets.push(hypernet);
       remainder = remainder.slice(1); // skip the "]"
     } else {
-      var supernet: string;
+      let supernet: string;
       [supernet, remainder] = utils.splitAt(remainder, "[");
       supernets.push(supernet);
     }

@@ -148,3 +148,10 @@ Another A* (with a twist). Part 2 is solved with an exhaustive depth-first searc
 |------|------------|
 |    1 | DRDRULRDRD |
 |    2 |        384 |
+
+## Day 18
+
+| Part |  Answer  |
+|------|----------|
+|    1 |     1956 |
+|    2 | 19995121 |

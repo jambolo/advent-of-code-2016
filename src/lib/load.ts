@@ -11,3 +11,8 @@ export function commaSeparatedValues(path: string): string[] {
 export function lines(path: string): string[] {
   return fs.readFileSync(path, 'utf-8').trim().split('\n');
 }
+
+// Reads a file and returns the content as a string.
+export function file(path: string): string {
+  return fs.readFileSync(path, 'utf-8').trim();
+}
