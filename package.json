@@ -21,17 +21,18 @@
     "day12": "tsx src/day12/index.ts",
     "day13": "tsx src/day13/index.ts",
     "day14": "tsx src/day14/index.ts",
-    "day15": "tsx src/day15/index.ts"
+    "day15": "tsx src/day15/index.ts",
+    "day16": "tsx src/day16/index.ts"
   },
   "keywords": [],
   "author": "John Bolton <jambolo@users.noreply.github.com> (https://jambolo.github.io)",
   "license": "MIT",
   "packageManager": "pnpm@10.29.3",
   "devDependencies": {
-    "@types/node": "^25.2.3",
+    "@types/node": "^25.5.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.0"
   },
   "dependencies": {
     "commander": "^14.0.3"

@@ -132,3 +132,10 @@ Classic Chinese Remainder Theorem. The numbers are small, so I solved it with a 
 |------|---------|
 |    1 |  122318 |
 |    2 | 3208583 |
+
+## Day 16
+
+| Part |      Answer       |
+|------|-------------------|
+|    1 | 10101001010100001 |
+|    2 | 10100001110101001 |
