@@ -164,3 +164,12 @@ I figured out a clever way to do part 1, but it doesn't work with part 2. I coul
 |------|---------|
 |    1 | 1815603 |
 |    2 | 1410630 |
+
+## Day 20
+
+Interval math is popular in AoC. I think I have implemented a libary in every one so far.
+
+| Part |  Answer  |
+|------|----------|
+|    1 | 31053880 |
+|    2 |      117 |
