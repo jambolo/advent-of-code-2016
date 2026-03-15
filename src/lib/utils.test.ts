@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { splitAt, minEntryByValue, maxEntryByValue, mapCounts, Heap } from './utils';
+import * as util from 'node:util';
+import { splitAt, minEntryByValue, maxEntryByValue, mapCounts, Heap, Deque } from './utils';
 
 describe('splitAt', () => {
   it('splits at the first occurrence of the delimiter', () => {
@@ -299,6 +300,366 @@ describe('Heap', () => {
     h.push(1);
     expect(h.pop()).toBe(1);
     expect(h.pop()).toBe(2);
+  });
+});
+
+describe('Deque', () => {
+  it('starts empty', () => {
+    const d = new Deque<number>();
+    expect(d.length).toBe(0);
+  });
+
+  it('constructs from array', () => {
+    const d = new Deque<number>([1, 2, 3]);
+    expect(d.length).toBe(3);
+    expect(d.popFront()).toBe(1);
+    expect(d.popFront()).toBe(2);
+    expect(d.popFront()).toBe(3);
+  });
+
+  it('constructs from empty array', () => {
+    const d = new Deque<number>([]);
+    expect(d.length).toBe(0);
+  });
+
+  it('does not mutate the source array', () => {
+    const src = [1, 2, 3];
+    const d = new Deque<number>(src);
+    d.popFront();
+    d.pushBack(99);
+    expect(src).toEqual([1, 2, 3]);
+  });
+
+  it('pushBack and popFront (FIFO)', () => {
+    const d = new Deque<number>();
+    d.pushBack(1);
+    d.pushBack(2);
+    d.pushBack(3);
+    expect(d.popFront()).toBe(1);
+    expect(d.popFront()).toBe(2);
+    expect(d.popFront()).toBe(3);
+  });
+
+  it('pushBack and popBack (LIFO)', () => {
+    const d = new Deque<number>();
+    d.pushBack(1);
+    d.pushBack(2);
+    d.pushBack(3);
+    expect(d.popBack()).toBe(3);
+    expect(d.popBack()).toBe(2);
+    expect(d.popBack()).toBe(1);
+  });
+
+  it('pushFront and popFront (LIFO)', () => {
+    const d = new Deque<number>();
+    d.pushFront(1);
+    d.pushFront(2);
+    d.pushFront(3);
+    expect(d.popFront()).toBe(3);
+    expect(d.popFront()).toBe(2);
+    expect(d.popFront()).toBe(1);
+  });
+
+  it('pushFront and popBack (FIFO)', () => {
+    const d = new Deque<number>();
+    d.pushFront(1);
+    d.pushFront(2);
+    d.pushFront(3);
+    expect(d.popBack()).toBe(1);
+    expect(d.popBack()).toBe(2);
+    expect(d.popBack()).toBe(3);
+  });
+
+  it('mixed push and pop operations', () => {
+    const d = new Deque<number>();
+    d.pushBack(1);
+    d.pushFront(2);
+    d.pushBack(3);
+    d.pushFront(4);
+    // State: [4, 2, 1, 3]
+    expect(d.popFront()).toBe(4);
+    expect(d.popBack()).toBe(3);
+    expect(d.popFront()).toBe(2);
+    expect(d.popBack()).toBe(1);
+  });
+
+  it('throws on popFront from empty deque', () => {
+    const d = new Deque<number>();
+    expect(() => d.popFront()).toThrow('empty');
+  });
+
+  it('throws on popBack from empty deque', () => {
+    const d = new Deque<number>();
+    expect(() => d.popBack()).toThrow('empty');
+  });
+
+  it('throws after draining via popFront', () => {
+    const d = new Deque<number>();
+    d.pushBack(1);
+    d.popFront();
+    expect(() => d.popFront()).toThrow('empty');
+  });
+
+  it('throws after draining via popBack', () => {
+    const d = new Deque<number>();
+    d.pushBack(1);
+    d.popBack();
+    expect(() => d.popBack()).toThrow('empty');
+  });
+
+  it('length tracks correctly through operations', () => {
+    const d = new Deque<number>();
+    expect(d.length).toBe(0);
+    d.pushBack(1);
+    expect(d.length).toBe(1);
+    d.pushFront(2);
+    expect(d.length).toBe(2);
+    d.pushBack(3);
+    expect(d.length).toBe(3);
+    d.popFront();
+    expect(d.length).toBe(2);
+    d.popBack();
+    expect(d.length).toBe(1);
+    d.popFront();
+    expect(d.length).toBe(0);
+  });
+
+  it('single element popFront', () => {
+    const d = new Deque<string>();
+    d.pushBack('only');
+    expect(d.length).toBe(1);
+    expect(d.popFront()).toBe('only');
+    expect(d.length).toBe(0);
+  });
+
+  it('single element popBack', () => {
+    const d = new Deque<string>();
+    d.pushBack('only');
+    expect(d.length).toBe(1);
+    expect(d.popBack()).toBe('only');
+    expect(d.length).toBe(0);
+  });
+
+  it('single pushFront element popFront', () => {
+    const d = new Deque<string>();
+    d.pushFront('only');
+    expect(d.length).toBe(1);
+    expect(d.popFront()).toBe('only');
+  });
+
+  it('single pushFront element popBack', () => {
+    const d = new Deque<string>();
+    d.pushFront('only');
+    expect(d.length).toBe(1);
+    expect(d.popBack()).toBe('only');
+  });
+
+  it('works with string values', () => {
+    const d = new Deque<string>();
+    d.pushBack('hello');
+    d.pushBack('world');
+    expect(d.popFront()).toBe('hello');
+    expect(d.popFront()).toBe('world');
+  });
+
+  it('pushFront after popFront reuses head slot', () => {
+    const d = new Deque<number>();
+    d.pushBack(1);
+    d.pushBack(2);
+    d.popFront(); // head advances to 1
+    d.pushFront(0); // should reuse slot at head-1
+    expect(d.length).toBe(2);
+    expect(d.popFront()).toBe(0);
+    expect(d.popFront()).toBe(2);
+  });
+
+  it('pushFront after multiple popFronts', () => {
+    const d = new Deque<number>();
+    d.pushBack(1);
+    d.pushBack(2);
+    d.pushBack(3);
+    d.popFront(); // head=1
+    d.popFront(); // head=2
+    d.pushFront(10); // reuse slot at head-1
+    d.pushFront(20); // reuse slot at head-1
+    expect(d.length).toBe(3);
+    expect(d.popFront()).toBe(20);
+    expect(d.popFront()).toBe(10);
+    expect(d.popFront()).toBe(3);
+  });
+
+  it('pushFront falls back to unshift when head is 0', () => {
+    const d = new Deque<number>();
+    d.pushBack(1);
+    d.pushFront(0); // head=0, must unshift
+    expect(d.length).toBe(2);
+    expect(d.popFront()).toBe(0);
+    expect(d.popFront()).toBe(1);
+  });
+
+  it('mixed pushFront/popFront interleaving', () => {
+    const d = new Deque<number>();
+    d.pushBack(1);
+    d.pushBack(2);
+    d.pushBack(3);
+    expect(d.popFront()).toBe(1);
+    d.pushFront(0);
+    expect(d.popFront()).toBe(0);
+    expect(d.popFront()).toBe(2);
+    d.pushFront(99);
+    expect(d.popFront()).toBe(99);
+    expect(d.popFront()).toBe(3);
+    expect(d.length).toBe(0);
+  });
+
+  it('pushFront after popFront then popBack', () => {
+    const d = new Deque<number>();
+    d.pushBack(1);
+    d.pushBack(2);
+    d.popFront();
+    d.pushFront(0);
+    // State: [0, 2]
+    expect(d.popBack()).toBe(2);
+    expect(d.popBack()).toBe(0);
+  });
+
+  it('handles interleaved pushBack/popFront sequences', () => {
+    const d = new Deque<number>();
+    d.pushBack(1);
+    d.pushBack(2);
+    expect(d.popFront()).toBe(1);
+    d.pushBack(3);
+    expect(d.popFront()).toBe(2);
+    d.pushBack(4);
+    expect(d.popFront()).toBe(3);
+    expect(d.popFront()).toBe(4);
+    expect(d.length).toBe(0);
+  });
+
+  it('reusable after fully draining', () => {
+    const d = new Deque<number>();
+    d.pushBack(1);
+    d.pushBack(2);
+    d.popFront();
+    d.popFront();
+    d.pushBack(10);
+    d.pushBack(20);
+    expect(d.popFront()).toBe(10);
+    expect(d.popFront()).toBe(20);
+  });
+
+  it('handles large number of popFront operations (triggers compaction)', () => {
+    const d = new Deque<number>();
+    for (let i = 0; i < 2000; i++) d.pushBack(i);
+    for (let i = 0; i < 2000; i++) {
+      expect(d.popFront()).toBe(i);
+    }
+    expect(d.length).toBe(0);
+  });
+
+  it('maintains correctness across compaction boundary', () => {
+    const d = new Deque<number>();
+    // Push enough to trigger compaction on popFront (head > 1024 && head*2 > arr.length)
+    for (let i = 0; i < 1500; i++) d.pushBack(i);
+    // Pop 1100 from front to trigger compaction
+    for (let i = 0; i < 1100; i++) {
+      expect(d.popFront()).toBe(i);
+    }
+    // Remaining elements should still be correct
+    expect(d.length).toBe(400);
+    expect(d.popFront()).toBe(1100);
+    expect(d.popBack()).toBe(1499);
+  });
+
+  it('handles alternating pushFront and popBack', () => {
+    const d = new Deque<number>();
+    for (let i = 0; i < 100; i++) {
+      d.pushFront(i);
+      expect(d.popBack()).toBe(i);
+    }
+    expect(d.length).toBe(0);
+  });
+
+  it('handles alternating pushBack and popFront', () => {
+    const d = new Deque<number>();
+    for (let i = 0; i < 100; i++) {
+      d.pushBack(i);
+      expect(d.popFront()).toBe(i);
+    }
+    expect(d.length).toBe(0);
+  });
+
+  describe('toArray', () => {
+    it('returns empty array for empty deque', () => {
+      const d = new Deque<number>();
+      expect(d.toArray()).toEqual([]);
+    });
+
+    it('returns elements in order', () => {
+      const d = new Deque<number>([1, 2, 3]);
+      expect(d.toArray()).toEqual([1, 2, 3]);
+    });
+
+    it('reflects pushFront/pushBack', () => {
+      const d = new Deque<number>();
+      d.pushBack(2);
+      d.pushFront(1);
+      d.pushBack(3);
+      expect(d.toArray()).toEqual([1, 2, 3]);
+    });
+
+    it('reflects popFront', () => {
+      const d = new Deque<number>([1, 2, 3]);
+      d.popFront();
+      expect(d.toArray()).toEqual([2, 3]);
+    });
+
+    it('reflects popBack', () => {
+      const d = new Deque<number>([1, 2, 3]);
+      d.popBack();
+      expect(d.toArray()).toEqual([1, 2]);
+    });
+
+    it('does not mutate internal state', () => {
+      const d = new Deque<number>([1, 2, 3]);
+      const arr = d.toArray();
+      arr.push(99);
+      expect(d.toArray()).toEqual([1, 2, 3]);
+    });
+  });
+
+  describe('[util.inspect.custom]', () => {
+    it('returns array representation for empty deque', () => {
+      const d = new Deque<number>();
+      expect((d as any)[util.inspect.custom]()).toEqual([]);
+    });
+
+    it('returns array representation of elements', () => {
+      const d = new Deque<number>([1, 2, 3]);
+      expect((d as any)[util.inspect.custom]()).toEqual([1, 2, 3]);
+    });
+
+    it('reflects operations', () => {
+      const d = new Deque<number>([1, 2, 3, 4]);
+      d.popFront();
+      d.pushBack(5);
+      expect((d as any)[util.inspect.custom]()).toEqual([2, 3, 4, 5]);
+    });
+
+    it('matches toArray output', () => {
+      const d = new Deque<number>();
+      d.pushBack(10);
+      d.pushFront(5);
+      d.pushBack(15);
+      d.popFront();
+      expect((d as any)[util.inspect.custom]()).toEqual(d.toArray());
+    });
+
+    it('formats correctly with util.inspect', () => {
+      const d = new Deque<number>([1, 2, 3]);
+      const output = util.inspect(d);
+      expect(output).toBe('[ 1, 2, 3 ]');
+    });
   });
 });
 

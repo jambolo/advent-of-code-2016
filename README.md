@@ -155,3 +155,12 @@ Another A* (with a twist). Part 2 is solved with an exhaustive depth-first searc
 |------|----------|
 |    1 |     1956 |
 |    2 | 19995121 |
+
+## Day 19
+
+I figured out a clever way to do part 1, but it doesn't work with part 2. I couldn't think of an easy way to solve part 2. The naive way is O(n^2) and is too slow. I looked up a better way using two equal-sized deques and implemented that. Apparently (and not surprisingly), there are even better solutions: it's called the Josephus problem.
+
+| Part |  Answer |
+|------|---------|
+|    1 | 1815603 |
+|    2 | 1410630 |

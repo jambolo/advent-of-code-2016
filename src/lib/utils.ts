@@ -1,5 +1,7 @@
 // Utility functions
 
+import * as util from "node:util";
+
 // Binary heap with user-supplied comparison function.
 // compare(a, b) should return true if a has higher priority than b.
 export class Heap<T> {
@@ -77,6 +79,54 @@ export class Heap<T> {
       i = best;
     }
   }
+}
+
+// Double-ended queue with O(1) amortized push and pop from both ends.
+export class Deque<T> {
+  private arr: T[];
+  private head = 0;
+
+  constructor(init: T[] = []) {
+    this.arr = [...init];
+  }
+
+  get length() { return this.arr.length - this.head; }
+
+  pushFront(v: T) {
+    if (this.head > 0) {
+      this.arr[--this.head] = v;
+    } else {
+      this.arr.unshift(v);
+    }
+  }
+
+  pushBack(v: T) { this.arr.push(v); }
+
+  popBack(): T {
+    if (this.length === 0) throw new Error("empty");
+    return this.arr.pop()!;
+  }
+
+  popFront(): T {
+    if (this.length === 0) throw new Error("empty");
+    const v = this.arr[this.head++]!;
+    if (this.head > 1024 && this.head * 2 > this.arr.length) {
+      this.arr = this.arr.slice(this.head);
+      this.head = 0;
+    }
+    return v;
+  }
+
+  // Optional helper for non-console usage
+  toArray(): T[] {
+    return this.arr.slice(this.head);
+  }
+
+  [util.inspect.custom](): unknown {
+    // Returning an actual Array makes console.log print it as `[a, b, c]`
+    return this.arr.slice(this.head);
+  }
+
 }
 
 // Splits a string at the first occurrence of a delimiter.

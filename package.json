@@ -24,7 +24,8 @@
     "day15": "tsx src/day15/index.ts",
     "day16": "tsx src/day16/index.ts",
     "day17": "tsx src/day17/index.ts",
-    "day18": "tsx src/day18/index.ts"
+    "day18": "tsx src/day18/index.ts",
+    "day19": "tsx src/day19/index.ts"
   },
   "keywords": [],
   "author": "John Bolton <jambolo@users.noreply.github.com> (https://jambolo.github.io)",
