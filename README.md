@@ -139,3 +139,12 @@ Classic Chinese Remainder Theorem. The numbers are small, so I solved it with a 
 |------|-------------------|
 |    1 | 10101001010100001 |
 |    2 | 10100001110101001 |
+
+## Day 17
+
+Another A* (with a twist). Part 2 is solved with an exhaustive depth-first search. It finishes quickly, so no big deal.
+
+| Part |   Answer   |
+|------|------------|
+|    1 | DRDRULRDRD |
+|    2 |        384 |
