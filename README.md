@@ -167,9 +167,16 @@ I figured out a clever way to do part 1, but it doesn't work with part 2. I coul
 
 ## Day 20
 
-Interval math is popular in AoC. I think I have implemented a libary in every one so far.
+Interval math is popular in AoC. I think I have implemented a library in every one so far.
 
 | Part |  Answer  |
 |------|----------|
 |    1 | 31053880 |
 |    2 |      117 |
+
+## Day 21
+
+| Part |  Answer  |
+|------|----------|
+|    1 | fdhbcgea |
+|    2 | egfbcadh |
