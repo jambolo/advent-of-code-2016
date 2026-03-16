@@ -176,7 +176,16 @@ Interval math is popular in AoC. I think I have implemented a library in every o
 
 ## Day 21
 
+Lots of typing but otherwise trivial. The key to part 2 is to just create a table. There are only 8 elements.
+
 | Part |  Answer  |
 |------|----------|
 |    1 | fdhbcgea |
 |    2 | egfbcadh |
+
+## Day 22
+
+| Part | Answer |
+|------|--------|
+|    1 |    985 |
+|    2 |      ? |
