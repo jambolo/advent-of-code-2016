@@ -2,7 +2,10 @@ export enum Operation {
   CPY, // cpy x y copies x (either an integer or the value of a register) into register y.
   INC, // inc x increases the value of register x by one.
   DEC, // dec x decreases the value of register x by one.
-  JNZ  // jnz x y jumps to an instruction y away (positive means forward; negative means backward), but only if x is not zero.
+  JNZ, // jnz x y jumps to an instruction y away (positive means forward; negative means backward), but only if x is not zero.
+  ADD, // add x y adds the value of register x to register y.
+  NOP, // A no-op instruction
+  MUL, // mul x y multiplies the value of register y by the value of register x.
 }
 
 
@@ -14,6 +17,35 @@ export interface Instruction {
 
 export type Program = Instruction[];
 
+function disassemble(instruction: Instruction): string {
+  function operand(i: number) {
+    const r = instruction.registers[i];
+    return (r !== null) ? String.fromCharCode('a'.charCodeAt(0) + r) : instruction.literals[i].toString();
+  }
+
+  let s = Operation[instruction.opcode].toString();
+
+  switch (instruction.opcode) {
+    case Operation.CPY:
+    case Operation.JNZ:
+    case Operation.ADD:
+    case Operation.MUL: {
+      s += ' ' + operand(0);
+      s += ' ' + operand(1);
+      break;
+    }
+    case Operation.INC:
+    case Operation.DEC: {
+      s += ' ' + operand(0);
+      break;
+    }
+    case Operation.NOP: {
+      break;
+    }
+  }
+
+  return s;
+}
 export class CPU {
   public registers: number[] = [0, 0, 0, 0]
   private program: Program = [];
@@ -64,6 +96,24 @@ export class CPU {
           this.pc += (condition !== 0) ? offset : 1;
           break;
         }
+        case Operation.ADD: {
+          const from = instruction.registers[0]!;
+          const to = instruction.registers[1]!;
+          this.registers[to] += this.registers[from];
+          this.pc++;
+          break;
+        }
+        case Operation.NOP: {
+          this.pc++;
+          break;
+        }
+        case Operation.MUL: {
+          const from = instruction.registers[0]!;
+          const to = instruction.registers[1]!;
+          this.registers[to] *= this.registers[from];
+          this.pc++;
+          break;
+        }
       }
     }
   }
@@ -106,6 +156,15 @@ function parseJnzArgs(args:string[]): [ registers: (number | null)[], literals: 
   return [registers, literals];
 }
 
+function parseAddMulArgs(args:string[]): [ registers: (number | null)[], literals: number[] ] {
+  let registers: (number | null)[] = [null, null];
+  let literals: number[] = [0, 0];
+  if (args[0] === undefined || args[1] === undefined) throw new Error(`Missing operand`);
+  registers[0] = parseRegister(args[0]);
+  registers[1] = parseRegister(args[1]);
+  return [registers, literals];
+}
+
 export function assemble(input: string[]): Program {
   const program: Program = [];
   for (let i = 0; i < input.length; i++) {
@@ -136,6 +195,23 @@ export function assemble(input: string[]): Program {
           [registers, literals] = parseJnzArgs(args);
           break;
         }
+        case 'add': {
+          opcode = Operation.ADD;
+          [registers, literals] = parseAddMulArgs(args);
+          break;
+        }
+        case 'mul': {
+          opcode = Operation.MUL;
+          [registers, literals] = parseAddMulArgs(args);
+          break;
+        }
+        case 'nop': {
+          opcode = Operation.NOP;
+          registers = [];
+          literals = [];
+          break;
+        }
+
         default: throw new Error(`Unknown opcode: ${opcodeStr}`);
       }
     } catch (e) {
