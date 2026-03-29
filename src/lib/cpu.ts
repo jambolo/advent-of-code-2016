@@ -3,6 +3,7 @@ export enum Operation {
   INC, // inc x increases the value of register x by one.
   DEC, // dec x decreases the value of register x by one.
   JNZ, // jnz x y jumps to an instruction y away (positive means forward; negative means backward), but only if x is not zero.
+  TGL, // tgl x alters the instruction x away. Altering it again reverts it back to the original instruction.
   ADD, // add x y adds the value of register x to register y.
   NOP, // A no-op instruction
   MUL, // mul x y multiplies the value of register y by the value of register x.
@@ -35,7 +36,8 @@ function disassemble(instruction: Instruction): string {
       break;
     }
     case Operation.INC:
-    case Operation.DEC: {
+    case Operation.DEC:
+    case Operation.TGL: {
       s += ' ' + operand(0);
       break;
     }
@@ -50,6 +52,7 @@ export class CPU {
   public registers: number[] = [0, 0, 0, 0]
   private program: Program = [];
   private pc: number = 0;
+  private altered: boolean[] = [];
 
   operand(instruction: Instruction, i: number): number {
     const r = instruction.registers[i];
@@ -70,48 +73,118 @@ export class CPU {
     while (this.pc >= 0 && this.pc < this.program.length) {
       const instruction = this.program[this.pc];
       const currentPc = this.pc;
+      const isAltered = this.altered[currentPc];
+//      console.log(`${currentPc}: ${disassemble(instruction)} [${this.registers}]${isAltered ? ' (altered)' : ''}`);
       switch (instruction.opcode) {
         case Operation.CPY: {
-          const from = this.operand(instruction, 0);
-          const to = instruction.registers[1]!;
-          this.registers[to] = from;
-          this.pc++;
+          if (isAltered) {
+            // For two-argument instructions, jnz becomes cpy, and all other two-instructions become jnz.
+            const condition = this.operand(instruction, 0);
+            const offset = this.operand(instruction, 1);
+            this.pc += (condition !== 0) ? offset : 1;
+          } else {
+            const from = this.operand(instruction, 0);
+            const to = instruction.registers[1]!;
+            this.registers[to] = from;
+            this.pc++;
+          }
           break;
         }
         case Operation.INC: {
-          const register = instruction.registers[0]!;
-          this.registers[register]++;
-          this.pc++;
+          if (isAltered) {
+            // For one-argument instructions, inc becomes dec, and all other one-argument instructions become inc.
+            const register = instruction.registers[0];
+            if (register !== null) {
+              this.registers[register]--;
+            }
+            this.pc++;
+          } else {
+            const register = instruction.registers[0]!;
+            this.registers[register]++;
+            this.pc++;
+          }
           break;
         }
         case Operation.DEC: {
-          const register = instruction.registers[0]!;
-          this.registers[register]--;
-          this.pc++;
+          if (isAltered) {
+            // For one-argument instructions, inc becomes dec, and all other one-argument instructions become inc.
+            const register = instruction.registers[0];
+            if (register !== null) {
+              this.registers[register]++;
+            }
+            this.pc++;
+          } else {
+            const register = instruction.registers[0]!;
+            this.registers[register]--;
+            this.pc++;
+          }
           break;
         }
         case Operation.JNZ: {
-          const condition = this.operand(instruction, 0);
-          const offset = this.operand(instruction, 1);
-          this.pc += (condition !== 0) ? offset : 1;
+          if (isAltered) {
+            // For two-argument instructions, jnz becomes cpy, and all other two-instructions become jnz.
+            const from = this.operand(instruction, 0);
+            const to = instruction.registers[1];
+            if (to !== null) {
+              this.registers[to] = from;
+            }
+            this.pc++;
+          } else {
+            const condition = this.operand(instruction, 0);
+            const offset = this.operand(instruction, 1);
+            this.pc += (condition !== 0) ? offset : 1;
+          }
+          break;
+        }
+        case Operation.TGL: {
+          if (isAltered) {
+            // For one-argument instructions, inc becomes dec, and all other one-argument instructions become inc.
+            const register = instruction.registers[0];
+            if (register !== null) {
+              this.registers[register]++;
+            }
+            this.pc++;
+          } else {
+            const offset = this.operand(instruction, 0);
+            const targetPc = currentPc + offset;
+            if (targetPc >= 0 && targetPc < this.program.length) {
+              this.altered[targetPc] = !this.altered[targetPc];
+            }
+            this.pc++;
+          }
           break;
         }
         case Operation.ADD: {
-          const from = instruction.registers[0]!;
-          const to = instruction.registers[1]!;
-          this.registers[to] += this.registers[from];
-          this.pc++;
+          if (isAltered) {
+            // This is a fake instruction that I use to speed up the program. It can't be altered
+            throw new Error(`ADD instruction cannot be altered`);
+          } else {
+            const from = instruction.registers[0]!;
+            const to = instruction.registers[1]!;
+            this.registers[to] += this.registers[from];
+            this.pc++;
+          }
           break;
         }
         case Operation.NOP: {
-          this.pc++;
+          if (isAltered) {
+            // This is a fake instruction that I use to speed up the program. It can't be altered
+            throw new Error(`NOP instruction cannot be altered`);
+          } else {
+            this.pc++;
+          }
           break;
         }
         case Operation.MUL: {
-          const from = instruction.registers[0]!;
-          const to = instruction.registers[1]!;
-          this.registers[to] *= this.registers[from];
-          this.pc++;
+          if (isAltered) {
+            // This is a fake instruction that I use to speed up the program. It can't be altered
+            throw new Error(`MUL instruction cannot be altered`);
+          } else {
+            const from = instruction.registers[0]!;
+            const to = instruction.registers[1]!;
+            this.registers[to] *= this.registers[from];
+            this.pc++;
+          }
           break;
         }
       }
@@ -156,6 +229,14 @@ function parseJnzArgs(args:string[]): [ registers: (number | null)[], literals: 
   return [registers, literals];
 }
 
+function parseTglArgs(args:string[]): [ registers: (number | null)[], literals: number[] ] {
+  let register: (number | null) = null;
+  let literal: number = 0;
+  if (args[0] === undefined) throw new Error(`Missing operand`);
+  [register, literal] = parseRegisterOrLiteral(args[0]);
+  return [[register], [literal]];
+}
+
 function parseAddMulArgs(args:string[]): [ registers: (number | null)[], literals: number[] ] {
   let registers: (number | null)[] = [null, null];
   let literals: number[] = [0, 0];
@@ -193,6 +274,11 @@ export function assemble(input: string[]): Program {
         case 'jnz': {
           opcode = Operation.JNZ;
           [registers, literals] = parseJnzArgs(args);
+          break;
+        }
+        case 'tgl': {
+          opcode = Operation.TGL;
+          [registers, literals] = parseTglArgs(args);
           break;
         }
         case 'add': {

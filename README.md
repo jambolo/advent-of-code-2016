@@ -209,3 +209,14 @@ The total is 179 steps. I might come back and actually write an algorithm to sol
 |------|--------|
 |    1 |    985 |
 |    2 |    179 |
+
+## Day 23
+
+Part 1 was straightforward. Part 2 required adding ADD and MUL operations and optimizing the program by replacing INC loops with the new ADD and MUL instructions.
+
+| Part |   Answer  |
+|------|-----------|
+|    1 |     11975 |
+|    2 | 479008535 |
+
+*Note: Part 2 must be run with the modified input data*
