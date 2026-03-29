@@ -185,7 +185,27 @@ Lots of typing but otherwise trivial. The key to part 2 is to just create a tabl
 
 ## Day 22
 
+The solution to part 2 lends itself to a depth-first search, but the size of the state makes a generic search impossible. I inspected the data and I found these facts:
+
+1. There is one empty node.
+2. There are several nodes whose contents cannot be moved.
+3. No nodes can be combined.
+
+These facts reduce the puzzle to exactly what the example in the description shows: move the empty space around in a way to allow the data to move to the left.
+
+In fact, after drawing the map, I don't even need to write an algorithm to find the solution. The solution is the sum of these steps:
+
+1. Move the empty space to the left to get around the blocked cells: 3 steps
+2. Move the empty space to y = 0: 20 steps
+3. Move the empty space to the left of the data: 5 steps
+4. Do this sequence 30 times: 150 steps
+   1. Move the data to the left: 1 step.
+   2. Move the empty space to left of the data: 4 steps.
+5. Move the data to the goal node: 1 step.
+
+The total is 179 steps. I might come back and actually write an algorithm to solve this some day, but probably not.
+
 | Part | Answer |
 |------|--------|
 |    1 |    985 |
-|    2 |      ? |
+|    2 |    179 |
