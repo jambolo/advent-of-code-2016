@@ -7,6 +7,7 @@ export enum Operation {
   ADD, // add x y adds the value of register x to register y.
   NOP, // A no-op instruction
   MUL, // mul x y multiplies the value of register y by the value of register x.
+  OUT, // out x outputs the value of x (either an integer or the value of a register) to the console.
 }
 
 
@@ -37,7 +38,8 @@ function disassemble(instruction: Instruction): string {
     }
     case Operation.INC:
     case Operation.DEC:
-    case Operation.TGL: {
+    case Operation.TGL:
+    case Operation.OUT: {
       s += ' ' + operand(0);
       break;
     }
@@ -187,6 +189,21 @@ export class CPU {
           }
           break;
         }
+        case Operation.OUT: {
+          if (isAltered) {
+            // For one-argument instructions, inc becomes dec, and all other one-argument instructions become inc.
+            const register = instruction.registers[0];
+            if (register !== null) {
+              this.registers[register]++;
+            }
+            this.pc++;
+          } else {
+            const value = this.operand(instruction, 0);
+            console.log(`OUT: ${value}  # [${this.registers}]`);
+            this.pc++;
+          }
+          break;
+        }
       }
     }
   }
@@ -246,6 +263,15 @@ function parseAddMulArgs(args:string[]): [ registers: (number | null)[], literal
   return [registers, literals];
 }
 
+function parseOutArgs(args:string[]): [ registers: (number | null)[], literals: number[] ] {
+  if (args[0] === undefined) throw new Error(`Missing operand`);
+  let registers: (number | null)[] = [null];
+  let literals: number[] = [0];
+  [registers[0], literals[0]] = parseRegisterOrLiteral(args[0]);
+  return [registers, literals];
+}
+
+
 export function assemble(input: string[]): Program {
   const program: Program = [];
   for (let i = 0; i < input.length; i++) {
@@ -295,6 +321,11 @@ export function assemble(input: string[]): Program {
           opcode = Operation.NOP;
           registers = [];
           literals = [];
+          break;
+        }
+        case 'out': {
+          opcode = Operation.OUT;
+          [registers, literals] = parseOutArgs(args);
           break;
         }
 

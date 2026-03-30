@@ -219,7 +219,7 @@ Part 1 was straightforward. Part 2 required adding ADD and MUL operations and op
 |    1 |     11975 |
 |    2 | 479008535 |
 
-*Note: Part 2 must be run with the modified input data*
+*Note: Part 2 must be run using the modified input data file* `day23-input-modified.txt`
 
 ## Day 24
 
@@ -229,3 +229,24 @@ Combination of A* and traveling salesman problem. It was interesting, but straig
 |------|--------|
 |    1 |    500 |
 |    2 |    748 |
+
+## Day 25
+
+Analyzing the output and the registers, I found that the code adds 2534 and converts the number to binary. So, the answer is `0b101010101010 - 2534`. I imagine that each person has a different constant.
+
+| Part | Answer |
+|------|--------|
+|    1 |    196 |
+|    2 |    N/A |
+
+## Notable Algorithms and Techniques Used
+
+| Day | Algorithms and Techniques   |
+|-----|-----------------------------|
+|  11 | A* search                   |
+|  14 | Memoization                 |
+|  15 | Chinese Remainder Theorem   |
+|  16 | Dragon curve expansion      |
+|  19 | Josephus problem            |
+|  20 | Interval set operations     |
+|  24 | Traveling Salesman Problem  |
