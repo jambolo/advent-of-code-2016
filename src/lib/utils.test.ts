@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import * as util from 'node:util';
-import { splitAt, minEntryByValue, maxEntryByValue, mapCounts, Heap, Deque } from './utils';
+import { splitAt, minEntryByValue, maxEntryByValue, mapCounts, Heap, Deque, permutations } from './utils';
 
 describe('splitAt', () => {
   it('splits at the first occurrence of the delimiter', () => {
@@ -726,5 +726,118 @@ describe('Heap (isEmpty, clear, drain)', () => {
     const h = minHeapFn();
     [0, -3, 5, -1, -10].forEach(v => h.push(v));
     expect(h.drain()).toEqual([-10, -3, -1, 0, 5]);
+  });
+});
+
+describe('permutations', () => {
+  // Collect all permutations into a sorted array for stable comparison.
+  const collect = <T>(items: readonly T[]) =>
+    [...permutations(items)].sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
+
+  it('empty array yields one empty permutation', () => {
+    expect(collect([])).toEqual([[]]);
+  });
+
+  it('single element yields one permutation', () => {
+    expect(collect([1])).toEqual([[1]]);
+  });
+
+  it('two elements yields two permutations', () => {
+    expect(collect([1, 2])).toEqual([[1, 2], [2, 1]]);
+  });
+
+  it('three elements yields six permutations', () => {
+    const result = collect([1, 2, 3]);
+    expect(result).toEqual([
+      [1, 2, 3], [1, 3, 2],
+      [2, 1, 3], [2, 3, 1],
+      [3, 1, 2], [3, 2, 1],
+    ]);
+  });
+
+  it('four elements yields 24 permutations', () => {
+    const result = [...permutations([1, 2, 3, 4])];
+    expect(result.length).toBe(24);
+    // All unique
+    const set = new Set(result.map(p => p.join(',')));
+    expect(set.size).toBe(24);
+  });
+
+  it('works with strings', () => {
+    expect(collect(['a', 'b'])).toEqual([['a', 'b'], ['b', 'a']]);
+  });
+
+  it('works with mixed types', () => {
+    const result = collect([1, 'x']);
+    expect(result.length).toBe(2);
+    expect(result).toContainEqual([1, 'x']);
+    expect(result).toContainEqual(['x', 1]);
+  });
+
+  it('duplicate values produce duplicate permutations', () => {
+    // The generator does not deduplicate; it treats elements by position.
+    const result = [...permutations([1, 1])];
+    expect(result.length).toBe(2);
+    expect(result[0]).toEqual([1, 1]);
+    expect(result[1]).toEqual([1, 1]);
+  });
+
+  it('duplicate values with three elements', () => {
+    const result = [...permutations([1, 1, 2])];
+    expect(result.length).toBe(6);
+    // Every permutation is a rearrangement of [1, 1, 2]
+    for (const p of result) {
+      expect(p.slice().sort()).toEqual([1, 1, 2]);
+    }
+  });
+
+  it('each permutation is a new array (not shared references)', () => {
+    const result = [...permutations([1, 2, 3])];
+    result[0][0] = 999;
+    expect(result[1][0]).not.toBe(999);
+  });
+
+  it('does not mutate the input array', () => {
+    const input = [3, 1, 2];
+    const copy = [...input];
+    [...permutations(input)]; // consume
+    expect(input).toEqual(copy);
+  });
+
+  it('is lazy (generator protocol)', () => {
+    const gen = permutations([1, 2, 3]);
+    const first = gen.next();
+    expect(first.done).toBe(false);
+    expect(first.value).toHaveLength(3);
+  });
+
+  it('can be partially consumed', () => {
+    const gen = permutations([1, 2, 3, 4]);
+    const first3: number[][] = [];
+    for (const p of gen) {
+      first3.push(p);
+      if (first3.length === 3) break;
+    }
+    expect(first3.length).toBe(3);
+  });
+
+  it('five elements yields 120 permutations', () => {
+    const result = [...permutations([1, 2, 3, 4, 5])];
+    expect(result.length).toBe(120);
+    const set = new Set(result.map(p => p.join(',')));
+    expect(set.size).toBe(120);
+  });
+
+  it('each permutation contains exactly the original elements', () => {
+    const input = [10, 20, 30];
+    for (const p of permutations(input)) {
+      expect(p.slice().sort((a, b) => a - b)).toEqual([10, 20, 30]);
+    }
+  });
+
+  it('works with readonly input', () => {
+    const input = [1, 2] as const;
+    const result = [...permutations(input)];
+    expect(result.length).toBe(2);
   });
 });

@@ -154,3 +154,16 @@ export function mapCounts<T>(a: T[]): Map<T, number> {
   for (const key of a) counts.set(key, (counts.get(key) ?? 0) + 1);
   return counts;
 }
+
+// Returns all permutations of an array.
+export function* permutations<T>(items: readonly T[]): Generator<T[]> {
+  if (items.length <= 1) {
+    yield items.slice();
+    return;
+  }
+  for (let i = 0; i < items.length; i++) {
+    const head = items[i];
+    const rest = items.slice(0, i).concat(items.slice(i + 1));
+    for (const p of permutations(rest)) yield [head, ...p];
+  }
+}

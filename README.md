@@ -220,3 +220,12 @@ Part 1 was straightforward. Part 2 required adding ADD and MUL operations and op
 |    2 | 479008535 |
 
 *Note: Part 2 must be run with the modified input data*
+
+## Day 24
+
+Combination of A* and traveling salesman problem. It was interesting, but straightforward.
+
+| Part | Answer |
+|------|--------|
+|    1 |    500 |
+|    2 |    748 |
